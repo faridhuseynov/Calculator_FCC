@@ -1,0 +1,19 @@
+.Keyboard {
+    display: flex;
+    margin-top: 5px;
+    margin-left: 5px;    
+}
+
+.Left {
+    display: flex;
+    flex: 1 0 25%;
+    flex-wrap: wrap;
+}
+
+.Right {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 0%;
+    flex-wrap: wrap;
+    align-content: baseline;
+}

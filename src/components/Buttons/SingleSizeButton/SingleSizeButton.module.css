@@ -1,0 +1,26 @@
+.Single{
+    background-color: rgb(11, 6, 58);
+    height: 50px;
+    width: 50px;
+    display: flex;
+    flex: 32%;
+    font-size: 20px;
+    border:1px solid black;
+    justify-content: center;
+    align-items: center;
+}
+
+.Single:hover{
+    border:1px solid wheat;
+    color: teal;
+}
+
+/* .Single button {
+    background-color: darkgray;
+    border:0px;
+    font-size: 20px;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    height: auto;
+    cursor: arrow;
+} */

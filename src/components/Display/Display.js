@@ -5,7 +5,7 @@ const display = (props) => {
     return(
         <div className={classes.Display}>
             <p className={classes.FullList}>
-                Full
+                {props.ops}
         </p>
             <p>
                 {props.last}

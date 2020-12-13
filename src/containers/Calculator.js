@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import classes from "./Calculator.module.css";
 import Display from "../components/Display/Display";
 import Keyboard from "../components/Keyboard/Keyboard";
@@ -8,29 +8,30 @@ class Calculator extends Component {
         operations: "",
         lastPushed: "0",
         decimalClicked: false,
-        doubleValue: ""
-    }
+        calculationFinished:false
 
-    componentDidUpdate(prevProps, prevState) {
-        if(prevState.lastPushed==="="){
-            this.setState({
-                lastPushed: "0",
-                operations: "",
-                decimalClicked: false,
-            });        
-        }
     }
 
     inputCheck = (input) => {
         let last = 0;
         let ops="";
+        if(this.state.calculationFinished){
+            console.log(this.state.calculationFinished);
+            this.setState({
+                lastPushed:'',
+                operations:ops,
+                calculationFinished:false
+            })
+        }
+        
         if (input === "AC") {
             this.setState({
-                lastPushed: "0",
-                operations: "",
+                lastPushed: last,
+                operations: ops,
                 decimalClicked: false,
             });
         }
+
         else if (input >= 0) {
             if (this.state.decimalClicked) {
                 last=this.state.lastPushed.concat(input);
@@ -54,7 +55,7 @@ class Calculator extends Component {
             }
         }
         
-        else if (input == '.') {
+        else if (input === '.') {
             if (!this.state.decimalClicked) {
                 if (this.state.lastPushed >= 0){
                     last=this.state.lastPushed + ".";
@@ -121,17 +122,23 @@ class Calculator extends Component {
                 }
                 else {
                     ops = this.state.operations;
-                    ops = ops.concat("=");
+                    let result = this.calculateOperation();
+                    if(!(ops[ops.length-1]>=0)){
+                        ops=ops.slice(0,-1);
+                    }
+                    ops=ops.concat("="+result);
                     this.setState({
-                        operations: ops
+                        operations: ops,
+                        lastPushed:result,
+                        calculationFinished:true,
+                        decimalClicked:false
                     })
-                    this.calculateOperation();
-
                 }
             }
-            this.setState({
-                decimalClicked: false
-            })
+            this.setState(prevValue=>({
+                decimalClicked: false,
+                ...prevValue
+            }))
         }
     }
 
@@ -141,7 +148,16 @@ class Calculator extends Component {
     
     calculateOperation(){
         let ops = this.state.operations;
-        
+        let result=0;
+        ops = ops.replace('--','+').replace('x','*');
+        if(!(ops[ops.length-1]>=0)){
+            ops=ops.slice(0,-1);
+        }
+        result=Number(eval(ops).toFixed(4));
+        if(result - Math.floor(result)===0){
+            result=result.toFixed(0);
+        }
+        return result;
     }
 
     render() {

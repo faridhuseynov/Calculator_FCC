@@ -9,21 +9,12 @@ class Calculator extends Component {
         lastPushed: "0",
         decimalClicked: false,
         calculationFinished:false
-
     }
 
     inputCheck = (input) => {
         let last = 0;
-        let ops="";
-        if(this.state.calculationFinished){
-            console.log(this.state.calculationFinished);
-            this.setState({
-                lastPushed:'',
-                operations:ops,
-                calculationFinished:false
-            })
-        }
-        
+        let ops="";        
+
         if (input === "AC") {
             this.setState({
                 lastPushed: last,
@@ -135,10 +126,9 @@ class Calculator extends Component {
                     })
                 }
             }
-            this.setState(prevValue=>({
-                decimalClicked: false,
-                ...prevValue
-            }))
+            this.setState({
+                decimalClicked: false
+            })
         }
     }
 

@@ -1,7 +1,9 @@
 .App {
   text-align: center;
   margin: auto;
-  margin-top: 250px;
+  background-color: #c5a880;
+  height: 1000px;
+  padding: 300px;
 }
 
 

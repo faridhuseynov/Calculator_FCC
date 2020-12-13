@@ -140,6 +140,7 @@ class Calculator extends Component {
     }
     
     calculateOperation(){
+        let ops = this.state.operations;
         
     }
 

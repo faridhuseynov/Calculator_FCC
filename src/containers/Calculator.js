@@ -8,25 +8,35 @@ class Calculator extends Component {
         operations: "",
         lastPushed: "0",
         decimalClicked: false,
-        calculationFinished:false
+        calculationFinished: false
     }
+
 
     inputCheck = (input) => {
         let last = 0;
-        let ops="";        
-
-        if (input === "AC") {
+        let ops = "";
+        if(this.state.calculationFinished && input!=='AC'){
+            let num=this.state.lastPushed;
             this.setState({
-                lastPushed: last,
-                operations: ops,
-                decimalClicked: false,
-            });
+                operations:num,
+                calculationFinished:false
+            })
+        }
+        else if (input === "AC") {
+            this.setState(
+                {
+                    lastPushed: last,
+                    operations: ops,
+                    decimalClicked: false,
+                    calculationFinished: false
+                }
+            )
         }
 
         else if (input >= 0) {
             if (this.state.decimalClicked) {
-                last=this.state.lastPushed.concat(input);
-                ops=this.state.operations.concat(input);
+                last = this.state.lastPushed.concat(input);
+                ops = this.state.operations.concat(input);
                 this.setState({
                     lastPushed: last,
                     operations: ops
@@ -38,26 +48,28 @@ class Calculator extends Component {
                     last = Number(this.state.lastPushed);
                 }
                 last = Number(last * 10) + Number(input);
-                ops=this.state.operations.concat(input);
+                ops = this.state.operations.concat(input);
                 this.setState({
                     lastPushed: last,
                     operations: ops
                 })
             }
         }
-        
+
         else if (input === '.') {
             if (!this.state.decimalClicked) {
-                if (this.state.lastPushed >= 0){
-                    last=this.state.lastPushed + ".";
-                    ops=this.state.operations.concat(".");
-                        this.setState({
-                            lastPushed: last,
-                            operations: ops
-                        })
+                if (this.state.lastPushed >= 0) {
+                    last = this.state.lastPushed;
+                    last = last + ".";
+                    ops = this.state.operations.concat(".");
+                    this.setState({
+                        lastPushed: last,
+                        operations: ops
+                    })
                 }
                 else {
-                    ops=this.state.operations.concat("0.");
+                    ops = this.state.operations
+                    ops = ops.concat("0.");
                     this.setState({
                         lastPushed: "0.",
                         operations: ops
@@ -70,8 +82,9 @@ class Calculator extends Component {
         }
 
         else {
-            if (this.state.lastPushed === "." || this.state.lastPushed >= 0 && input!=="=") {
-                ops = this.state.operations.concat(input);
+            if (this.state.lastPushed === "." || this.state.lastPushed >= 0 && input !== "=") {
+                ops = this.state.operations;
+                ops = ops.concat(input);
                 this.setState({
                     lastPushed: input,
                     operations: ops
@@ -87,19 +100,20 @@ class Calculator extends Component {
                             operations: ops
                         })
                     }
-                } 
-                
+                }
+
                 else {
-                    ops = this.state.operations.concat(input);
+                    ops = this.state.operations;
+                    ops = ops.concat(input);
                     this.setState({
                         lastPushed: input,
                         operations: ops
                     })
                 }
             }
-            
-            else if (input === '+' || input === 'x' || input === '/' || input==="=") {
-                if (!(this.state.lastPushed >= 0) && input!=="=") {
+
+            else if (input === '+' || input === 'x' || input === '/' || input === "=") {
+                if (!(this.state.lastPushed >= 0) && input !== "=") {
                     ops = this.state.operations.slice(0, -1);
                     let check = ops[ops.length - 1];
                     if (check !== '.' && !(check >= 0)) {
@@ -114,15 +128,15 @@ class Calculator extends Component {
                 else {
                     ops = this.state.operations;
                     let result = this.calculateOperation();
-                    if(!(ops[ops.length-1]>=0)){
-                        ops=ops.slice(0,-1);
+                    if (!(ops[ops.length - 1] >= 0)) {
+                        ops = ops.slice(0, -1);
                     }
-                    ops=ops.concat("="+result);
+                    ops = ops.concat("=" + result);
+
                     this.setState({
                         operations: ops,
-                        lastPushed:result,
-                        calculationFinished:true,
-                        decimalClicked:false
+                        lastPushed: result,
+                        calculationFinished: true
                     })
                 }
             }
@@ -135,17 +149,17 @@ class Calculator extends Component {
     clickHandler = (event) => {
         this.inputCheck(event);
     }
-    
-    calculateOperation(){
+
+    calculateOperation() {
         let ops = this.state.operations;
-        let result=0;
-        ops = ops.replace('--','+').replace('x','*');
-        if(!(ops[ops.length-1]>=0)){
-            ops=ops.slice(0,-1);
+        let result = 0;
+        ops = ops.replace('--', '+').replace('x', '*');
+        if (!(ops[ops.length - 1] >= 0)) {
+            ops = ops.slice(0, -1);
         }
-        result=Number(eval(ops).toFixed(4));
-        if(result - Math.floor(result)===0){
-            result=result.toFixed(0);
+        result = Number(eval(ops).toFixed(4));
+        if (result - Math.floor(result) === 0) {
+            result = result.toFixed(0);
         }
         return result;
     }
